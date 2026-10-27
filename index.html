@@ -1,0 +1,671 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Origami — шедевры в IT-дизайне</title>
+    <style>
+      :root {
+        --bg: #f4f9ff;
+        --bg2: #e6f1ff;
+        --card: #fff;
+        --ink: #17335c;
+        --mut: #5d7aa3;
+        --blue: #8fc1ff;
+        --sky: #bfe3ff;
+        --neon: #2ea8ff;
+        --glow: rgba(46, 168, 255, 0.55);
+        --line: #d3e6fb;
+        box-sizing: border-box;
+        padding-top: env(safe-area-inset-top, 0px);
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #0d1a2e;
+          --bg2: #12233d;
+          --card: #162b49;
+          --ink: #e8f3ff;
+          --mut: #9fb9d9;
+          --line: #24426b;
+          --glow: rgba(70, 185, 255, 0.6);
+          --neon: #52c0ff;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #0d1a2e;
+        --bg2: #12233d;
+        --card: #162b49;
+        --ink: #e8f3ff;
+        --mut: #9fb9d9;
+        --line: #24426b;
+        --glow: rgba(70, 185, 255, 0.6);
+        --neon: #52c0ff;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font-family: Inter, system-ui, "Segoe UI", Arial, sans-serif;
+        line-height: 1.6;
+      }
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+      .wrap {
+        max-width: 1080px;
+        margin: 0 auto;
+        padding: 0 22px;
+      }
+      section {
+        padding: 84px 0;
+      }
+      h1,
+      h2,
+      h3 {
+        line-height: 1.15;
+        letter-spacing: -0.02em;
+      }
+      h2 {
+        font-size: clamp(28px, 4vw, 42px);
+        margin-bottom: 14px;
+      }
+      .tag {
+        display: inline-block;
+        font-size: 13px;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--neon);
+        text-shadow: 0 0 12px var(--glow);
+        margin-bottom: 12px;
+      }
+      .mut {
+        color: var(--mut);
+      }
+      /* loader */
+      #loader {
+        position: fixed;
+        inset: 0;
+        z-index: 99;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(160deg, var(--bg), var(--bg2));
+        animation: out 0.5s 2s forwards;
+      }
+      @keyframes out {
+        to {
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+      #loader svg {
+        width: 220px;
+        filter: drop-shadow(0 0 10px var(--glow));
+      }
+      #loader p {
+        text-align: center;
+        margin-top: 10px;
+        letter-spacing: 0.4em;
+        font-size: 14px;
+        color: var(--neon);
+        text-shadow: 0 0 10px var(--glow);
+      }
+      .f {
+        transform-box: fill-box;
+        transform-origin: 50% 100%;
+        opacity: 0;
+        animation: fold 0.55s cubic-bezier(0.3, 1.4, 0.5, 1) forwards;
+        stroke: var(--neon);
+        stroke-width: 1.2;
+        stroke-linejoin: round;
+      }
+      @keyframes fold {
+        from {
+          opacity: 0;
+          transform: scaleY(0.1) rotate(-25deg) translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      .f1 {
+        fill: #d9ecff;
+        animation-delay: 0.1s;
+      }
+      .f2 {
+        fill: #b5d8ff;
+        animation-delay: 0.3s;
+      }
+      .f3 {
+        fill: #fff;
+        animation-delay: 0.55s;
+      }
+      .f4 {
+        fill: #cfe6ff;
+        animation-delay: 0.8s;
+      }
+      .f5 {
+        fill: #a6cfff;
+        animation-delay: 1.05s;
+      }
+      .f6 {
+        fill: #fff;
+        animation-delay: 1.3s;
+      }
+      /* nav */
+      nav {
+        position: sticky;
+        top: env(safe-area-inset-top, 0px);
+        z-index: 20;
+        backdrop-filter: blur(12px);
+        background: color-mix(in srgb, var(--bg) 80%, transparent);
+        border-bottom: 1px solid var(--line);
+      }
+      nav .wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 62px;
+      }
+      .logo {
+        font-weight: 800;
+        font-size: 20px;
+        letter-spacing: 0.04em;
+      }
+      .logo b {
+        color: var(--neon);
+        text-shadow: 0 0 14px var(--glow);
+      }
+      nav ul {
+        display: flex;
+        gap: 24px;
+        list-style: none;
+        padding: 0;
+        font-size: 15px;
+        color: var(--mut);
+      }
+      nav ul a:hover {
+        color: var(--neon);
+      }
+      .btn {
+        display: inline-block;
+        padding: 13px 26px;
+        border-radius: 999px;
+        font-weight: 600;
+        border: 1.5px solid var(--neon);
+        color: var(--neon);
+        box-shadow:
+          0 0 18px var(--glow),
+          inset 0 0 12px rgba(46, 168, 255, 0.12);
+        transition: 0.25s;
+        background: transparent;
+        cursor: pointer;
+        font-size: 15px;
+      }
+      .btn:hover {
+        background: var(--neon);
+        color: #fff;
+      }
+      .btn.fill {
+        background: var(--neon);
+        color: #fff;
+      }
+      /* hero */
+      .hero {
+        padding: 96px 0 80px;
+        background:
+          radial-gradient(600px 300px at 80% 10%, var(--sky), transparent 70%),
+          radial-gradient(500px 300px at 10% 90%, var(--bg2), transparent 70%);
+      }
+      .hero h1 {
+        font-size: clamp(38px, 7vw, 74px);
+        max-width: 780px;
+      }
+      .hero h1 span {
+        color: var(--neon);
+        text-shadow: 0 0 28px var(--glow);
+      }
+      .hero p {
+        max-width: 540px;
+        font-size: 18px;
+        margin: 22px 0 32px;
+      }
+      .row {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+        margin-top: 56px;
+      }
+      .stat {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 18px 20px;
+      }
+      .stat b {
+        display: block;
+        font-size: 30px;
+        color: var(--neon);
+      }
+      /* cards */
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 18px;
+        margin-top: 34px;
+      }
+      .card {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 26px;
+        transition: 0.25s;
+      }
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 0 26px var(--glow);
+        border-color: var(--neon);
+      }
+      .ico {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        background: var(--sky);
+        color: #0b4f8f;
+        font-size: 22px;
+        margin-bottom: 14px;
+      }
+      .card h3 {
+        font-size: 20px;
+        margin-bottom: 6px;
+      }
+      /* case */
+      .case {
+        background: linear-gradient(135deg, #dff0ff, #c4e0ff);
+        color: #12335d;
+        border-radius: 32px;
+        padding: 56px 38px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 0 50px var(--glow);
+      }
+      .case .big {
+        font-size: clamp(54px, 12vw, 130px);
+        font-weight: 800;
+        line-height: 1;
+        color: #fff;
+        text-shadow:
+          0 0 12px #2ea8ff,
+          0 0 40px #2ea8ff;
+      }
+      .case p {
+        max-width: 640px;
+        margin: 18px auto 0;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 14px;
+        margin-top: 34px;
+        text-align: left;
+      }
+      .steps div {
+        background: rgba(255, 255, 255, 0.65);
+        border-radius: 16px;
+        padding: 16px;
+      }
+      .steps b {
+        display: block;
+        color: #0f78d0;
+      }
+      /* pricing */
+      .price {
+        display: flex;
+        flex-direction: column;
+      }
+      .price.hot {
+        border-color: var(--neon);
+        box-shadow: 0 0 30px var(--glow);
+      }
+      .price .sum {
+        font-size: 38px;
+        font-weight: 800;
+        margin: 8px 0;
+      }
+      .price .sum small {
+        font-size: 15px;
+        font-weight: 500;
+        color: var(--mut);
+      }
+      .price ul {
+        list-style: none;
+        padding: 0;
+        margin: 14px 0 24px;
+        flex: 1;
+      }
+      .price li {
+        padding: 6px 0;
+        border-bottom: 1px dashed var(--line);
+        font-size: 15px;
+      }
+      .price li::before {
+        content: "✦ ";
+        color: var(--neon);
+      }
+      .badge {
+        align-self: flex-start;
+        font-size: 12px;
+        padding: 3px 12px;
+        border-radius: 99px;
+        background: var(--neon);
+        color: #fff;
+        margin-bottom: 6px;
+      }
+      /* cta */
+      .cta {
+        text-align: center;
+        background: var(--bg2);
+        border-radius: 32px;
+        padding: 60px 24px;
+      }
+      footer {
+        padding: 34px 0;
+        text-align: center;
+        font-size: 14px;
+        color: var(--mut);
+        border-top: 1px solid var(--line);
+      }
+      .rv {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: 0.7s;
+      }
+      .rv.on {
+        opacity: 1;
+        transform: none;
+      }
+      @media (max-width: 700px) {
+        nav ul {
+          display: none;
+        }
+        section {
+          padding: 60px 0;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .rv {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loader" aria-hidden="true">
+      <div>
+        <svg viewBox="0 0 200 160">
+          <polygon class="f f1" points="20,100 100,132 100,82" />
+          <polygon class="f f2" points="100,82 100,132 182,100" />
+          <polygon class="f f3" points="58,96 112,58 144,106" />
+          <polygon class="f f4" points="20,100 4,74 46,92" />
+          <polygon class="f f5" points="148,98 164,48 178,60 160,104" />
+          <polygon class="f f6" points="164,48 190,44 178,60" />
+        </svg>
+        <p>ORIGAMI</p>
+      </div>
+    </div>
+
+    <nav>
+      <div class="wrap">
+        <a class="logo" href="#top">Origami<b>.</b></a>
+        <ul>
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#case">Кейс</a></li>
+          <li><a href="#services">Продукты</a></li>
+          <li><a href="#pricing">Тарифы</a></li>
+        </ul>
+        <a class="btn" href="#contact">Связаться</a>
+      </div>
+    </nav>
+
+    <header class="hero" id="top">
+      <div class="wrap">
+        <span class="tag">IT-дизайн нового уровня</span>
+        <h1>Складываем цифровые <span>шедевры</span> из кода и дизайна</h1>
+        <p class="mut">
+          Origami создаёт уникальные дизайны и готовые IT-продукты — аккуратно,
+          точно и красиво, как настоящее оригами.
+        </p>
+        <div class="row">
+          <a class="btn fill" href="#pricing">Смотреть тарифы</a
+          ><a class="btn" href="#case">Наш главный кейс</a>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <b>13 млрд $</b><span class="mut">спасено клиентом</span>
+          </div>
+          <div class="stat"><b>120+</b><span class="mut">проектов</span></div>
+          <div class="stat"><b>8 лет</b><span class="mut">на рынке</span></div>
+          <div class="stat">
+            <b>99,99%</b><span class="mut">аптайм продуктов</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section id="about">
+      <div class="wrap rv">
+        <span class="tag">О компании</span>
+        <h2>Каждый продукт — как сложенный лист</h2>
+        <p class="mut" style="max-width: 660px">
+          Мы верим, что сложное должно выглядеть просто. Наша команда
+          дизайнеров, разработчиков и специалистов по безопасности вместе
+          превращает идею в продукт, которым приятно пользоваться и которому
+          можно доверять.
+        </p>
+        <div class="grid">
+          <div class="card">
+            <div class="ico">✎</div>
+            <h3>Уникальный дизайн</h3>
+            <p class="mut">
+              Никаких шаблонов: интерфейс и айдентика создаются под вашу задачу
+              с нуля.
+            </p>
+          </div>
+          <div class="card">
+            <div class="ico">⚙</div>
+            <h3>Готовые IT-продукты</h3>
+            <p class="mut">
+              Сайты, приложения и платформы «под ключ» — от прототипа до запуска
+              и поддержки.
+            </p>
+          </div>
+          <div class="card">
+            <div class="ico">🛡</div>
+            <h3>Кибербезопасность</h3>
+            <p class="mut">
+              Защита встроена в продукт с первого дня, а не добавляется потом.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="case">
+      <div class="wrap rv">
+        <div class="case">
+          <span class="tag" style="color: #0f78d0; text-shadow: none"
+            >Главный кейс</span
+          >
+          <div class="big">$<span id="cnt" data-to="13">13</span> млрд</div>
+          <h2 style="margin-top: 10px">
+            Один проект спас компанию от катастрофы
+          </h2>
+          <p>
+            Наш проект по кибербезопасности вовремя остановил масштабную атаку и
+            защитил активы клиента на 13 миллиардов долларов.
+          </p>
+          <div class="steps">
+            <div>
+              <b>01 · Аудит</b>Нашли уязвимости в инфраструктуре до того, как
+              ими воспользовались.
+            </div>
+            <div>
+              <b>02 · Защита</b>Выстроили многоуровневую систему мониторинга и
+              реагирования.
+            </div>
+            <div>
+              <b>03 · Результат</b>Атака отражена, данные и деньги клиента
+              остались в безопасности.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="services">
+      <div class="wrap rv">
+        <span class="tag">Что мы делаем</span>
+        <h2>Продукты и услуги</h2>
+        <div class="grid">
+          <div class="card">
+            <div class="ico">◧</div>
+            <h3>UI/UX-дизайн</h3>
+            <p class="mut">Исследование, прототипы, дизайн-системы.</p>
+          </div>
+          <div class="card">
+            <div class="ico">❖</div>
+            <h3>Веб и мобильные приложения</h3>
+            <p class="mut">Быстрая разработка на современном стеке.</p>
+          </div>
+          <div class="card">
+            <div class="ico">◈</div>
+            <h3>Готовые решения</h3>
+            <p class="mut">CRM, личные кабинеты, панели аналитики.</p>
+          </div>
+          <div class="card">
+            <div class="ico">⛨</div>
+            <h3>Защита и аудит</h3>
+            <p class="mut">Пентесты, мониторинг, обучение команд.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <div class="wrap rv">
+        <span class="tag">Тарифы разработки</span>
+        <h2>Выберите свой формат</h2>
+        <div class="grid">
+          <div class="card price">
+            <h3>Лист</h3>
+            <span class="mut">Лендинг или MVP-дизайн</span>
+            <div class="sum">150 000 ₽</div>
+            <ul>
+              <li>Уникальный дизайн</li>
+              <li>Адаптивная вёрстка</li>
+              <li>Базовая безопасность</li>
+              <li>Поддержка 1 месяц</li>
+            </ul>
+            <a class="btn" href="#contact">Выбрать</a>
+          </div>
+          <div class="card price hot">
+            <span class="badge">Популярный</span>
+            <h3>Журавль</h3>
+            <span class="mut">Полноценный продукт</span>
+            <div class="sum">480 000 ₽</div>
+            <ul>
+              <li>Дизайн-система</li>
+              <li>Веб-приложение под ключ</li>
+              <li>Аудит безопасности</li>
+              <li>Поддержка 3 месяца</li>
+            </ul>
+            <a class="btn fill" href="#contact">Выбрать</a>
+          </div>
+          <div class="card price">
+            <h3>Лебедь</h3>
+            <span class="mut">Платформа и защита</span>
+            <div class="sum">от 1 200 000 ₽</div>
+            <ul>
+              <li>Сложная платформа</li>
+              <li>Полный контур кибербезопасности</li>
+              <li>Личный менеджер</li>
+              <li>Поддержка 12 месяцев</li>
+            </ul>
+            <a class="btn" href="#contact">Выбрать</a>
+          </div>
+        </div>
+        <p class="mut" style="margin-top: 18px; font-size: 14px">
+          Цены ориентировочные, точная стоимость зависит от задачи.
+        </p>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="wrap rv">
+        <div class="cta">
+          <span class="tag">Давайте создадим шедевр</span>
+          <h2>Расскажите о своей идее</h2>
+          <p class="mut" style="margin-bottom: 26px">
+            Ответим в течение дня и предложим подходящий тариф.
+          </p>
+          <a class="btn fill" href="mailto:hello@origami.example"
+            >hello@origami.example</a
+          >
+        </div>
+      </div>
+    </section>
+
+    <footer>© 2026 Origami · Шедевры в IT-дизайне</footer>
+
+    <script>
+      (function () {
+        var els = document.querySelectorAll(".rv");
+        if ("IntersectionObserver" in window) {
+          var io = new IntersectionObserver(
+            function (es) {
+              es.forEach(function (e) {
+                if (e.isIntersecting) {
+                  e.target.classList.add("on");
+                  io.unobserve(e.target);
+                }
+              });
+            },
+            { threshold: 0.12 },
+          );
+          els.forEach(function (el) {
+            io.observe(el);
+          });
+        } else {
+          els.forEach(function (el) {
+            el.classList.add("on");
+          });
+        }
+        setTimeout(function () {
+          var l = document.getElementById("loader");
+          if (l) l.style.display = "none";
+        }, 2600);
+      })();
+    </script>
+  </body>
+</html>
